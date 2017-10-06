@@ -1,0 +1,55 @@
+{
+    "config": {
+        "objectName": "bacpypes-dweet-gateway",
+        "address": "10.0.1.211/24",
+        "objectIdentifier": 599,
+        "maxApduLengthAccepted": 1024,
+        "segmentationSupported": "segmentedBoth",
+        "vendorIdentifier": 999
+        },
+    "dweets": [
+        {
+            "thingName": "bacpypes-dweet-oa-conditions",
+            "interval": 30,
+            "tagList": [
+                {
+                    "tag": "temperature",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 1
+                },
+                {
+                    "tag": "humidity",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 2
+                },
+                {
+                    "tag": "pressure",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 3
+                },
+                {
+                    "tag": "enthalpy",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 4
+                },
+                {
+                    "tag": "wind_direction",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 5
+                },
+                {
+                    "tag": "wind_speed",
+                    "address": "10.0.1.210",
+                    "objectType": "analogValue",
+                    "objectInstance": 6
+                }
+            ]
+        }
+    ]
+}
+
