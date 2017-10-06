@@ -143,7 +143,6 @@ class DweetThread(Thread):
 
                 if iocb.ioError:
                     if _debug: DweetThread._debug("    - error: %r", iocb.ioError)
-                    self.response_values.append(iocb.ioError)
 
             # send the data
             if dweet_data:
@@ -194,10 +193,10 @@ def main():
     global args, settings, this_application
 
     # build a parser for the command line arguments
-    parser = ConfigArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__)
 
     # add a way to read a configuration file
-    parser.add_argument('--ini', type=str
+    parser.add_argument('--ini', type=str,
         help="device object configuration file",
         )
 
@@ -220,6 +219,11 @@ def main():
     # read in the configuration file
     if args.ini:
         config = _ConfigParser()
+
+        # case sensitive
+        config.optionxform = str
+
+        # read in the file
         config.read(args.ini)
         if _debug: _log.debug("    - config: %r", config)
 
@@ -235,7 +239,7 @@ def main():
         setattr(args, 'ini', ini_obj)
 
     # only one configuration
-    if hasattr(settings, "config") and hasattr(args.ini):
+    if hasattr(settings, "config") and args.ini:
         raise RuntimeError("ambiguous settings")
     elif hasattr(settings, "config"):
         device_settings = settings.config
@@ -247,15 +251,15 @@ def main():
 
     # make a device object
     this_device = LocalDeviceObject(
-        objectName=device_settings.objectname,
-        objectIdentifier=int(device_settings.objectidentifier),
-        maxApduLengthAccepted=int(device_settings.maxapdulengthaccepted),
-        segmentationSupported=device_settings.segmentationsupported,
-        vendorIdentifier=int(device_settings.vendoridentifier),
+        objectName=device_settings.objectName,
+        objectIdentifier=int(device_settings.objectIdentifier),
+        maxApduLengthAccepted=int(device_settings.maxApduLengthAccepted),
+        segmentationSupported=device_settings.segmentationSupported,
+        vendorIdentifier=int(device_settings.vendorIdentifier),
         )
 
     # make a simple application
-    this_application = BIPSimpleApplication(this_device, args.ini.address)
+    this_application = BIPSimpleApplication(this_device, device_settings.address)
 
     # get the services supported
     services_supported = this_application.get_services_supported()
