@@ -12,7 +12,8 @@ in PyPI.
 
     $ pip install bacpypes dweepy
 
-For the contents of the JSON configuration file, see the README.
+For a description of the contents of the JSON configuration file, see the
+README.
 """
 
 import os

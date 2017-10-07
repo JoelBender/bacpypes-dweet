@@ -30,10 +30,8 @@ a `config` and a `dweets`, like this:
 ```json
 {
     "config": {
-        ...
         },
     "dweets": [
-        ...
         ]
 }
 ```
@@ -86,13 +84,48 @@ of tags.  For example, this is a thing:
         }
 ```
 
+A Python thread is created for every 'thing'.  There is no restriction on the
+number of things that can be created, but there is a practical limit to the
+amount of BACnet communications traffic and dweepy API calls based on your
+network, number of devices, upstream bandwidth, etc.  There is also
+a limit to the number of times per minute that a thing can dweet.
+
 #### thingName
+
+A 'thing' is collection of name/value content pairs that is published to a
+message broker.  At the current time, the service is public and free, so play
+nice and pick a unique thing name.
 
 #### interval
 
+This is the interval in seconds that you want the thing to dweet.  There are
+limits to how fast a thing can dweet.
+
 #### tagList
 
+The `tagList` is an array of `tag` objects with a name, a description of
+a BACnet device, object, and property reference, and some simple value
+transformation options.  For the sample configuration file with the project,
+the content of the dweet will look something like this:
+
+```json
+{
+    "temperature": 61.84400177001953,
+    "humidity": 76.8499984741211,
+    "pressure": 32.98500061035156,
+    "enthalpy": 25.211944580078125,
+    "wind_direction": 140.54000854492188,
+    "wind_speed": 0.6690000295639038
+}
+```
+
+These are the raw floating point values coming back from this particular
+weather station which are much more precise than they are accurate!
+
 #### tag
+
+The name of the tag.  I have found it easier to work with the dweets when the
+tag names are restricted to letters and numbers.
 
 #### address
 
@@ -130,4 +163,22 @@ nearest hundredth, a value of zero (0) is rounded to the nearest integer.
 While the rounding can also be applied to the value when it appears on a
 dashboard or other display, it's often easier to put it in this configuration
 so it doesn't appear unnaturally precise.
+
+## Future Development
+
+It would be nice to replace the `address` of a device with its device instance
+number and have the application use the Who-Is BACnet service.
+
+Replace the `objectType` and `objectInstance` with `objectName` and have the
+application use the Who-Has BACnet service.  If the object name is unique
+in the entire BACnet intranet then it's not even necessary to specify the
+device address.  If the BACnet object name was exactly the same as the tag
+name, then even _that_ could be optional.
+
+Provide a way to use Read-Property-Multiple service, perhaps all of the values
+for a dweet can be read at once.
+
+Provide a way to use Change-of-Value notifications so reading the value isn't
+necessary, the application will cache the last good value and send a dweet when
+any of the tag values change.
 
